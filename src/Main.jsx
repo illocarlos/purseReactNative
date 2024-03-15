@@ -2,10 +2,23 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import Header from './Components/Headers.jsx'
 import NewBudget from './Components/NewBudget.jsx';
 const App = () => {
+
+
+
+    const budgetFunction = (budget) => {
+
+        if (Number(budget)) {
+            parseInt(budget)
+            console.log(budget)
+        }
+
+    }
     return (
         <SafeAreaView style={style.contain}>
             <Header />
-            <NewBudget />
+            <NewBudget
+                budgetFunction={budgetFunction}
+            />
         </SafeAreaView>
     );
 }

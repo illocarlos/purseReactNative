@@ -1,18 +1,31 @@
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native"
+import { useState } from 'react';
 
-const NewBudget = () => {
+const NewBudget = ({ budgetFunction }) => {
+
+
+    const [budget, setBudget] = useState(0)
+
+
     return (
         <View style={style.containNewBudget}>
             <View style={style.secondContainNewBudget} >
                 <Text style={style.textBlack}>define budget</Text>
                 <View style={style.inputRow} >
                     <TextInput
+                        value={budget.toString()}
+                        onChangeText={setBudget}
                         keyboardType="numeric"
                         placeholder="add your budget here"
                         style={style.input}
                         placeholderTextColor={'black'}
                     />
-                    <Pressable style={style.buttonAdd}>
+                    <Pressable
+                        onPress={() => {
+                            budgetFunction(budget)
+
+                        }}
+                        style={style.buttonAdd}>
                         <Text style={style.text}>
                             add Budget
                         </Text>
