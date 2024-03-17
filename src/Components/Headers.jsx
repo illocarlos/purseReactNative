@@ -1,4 +1,5 @@
 import { Text, View, StyleSheet } from "react-native";
+import GlobalStyles from '../Styles/Global.js';
 
 const App = () => {
     return (
@@ -16,8 +17,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'uppercase',
         fontWeight: '900',
-        color: 'black',
         fontSize: 30,
+        ...GlobalStyles.colorSecundary,
     }
 })
 

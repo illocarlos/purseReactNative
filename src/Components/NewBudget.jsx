@@ -1,10 +1,9 @@
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native"
-import { useState } from 'react';
+import GlobalStyles from '../Styles/Global.js';
 
-const NewBudget = ({ budgetFunction }) => {
+const NewBudget = ({ budgetFunction, budget, setBudget }) => {
 
 
-    const [budget, setBudget] = useState(0)
 
 
     return (
@@ -39,28 +38,28 @@ const NewBudget = ({ budgetFunction }) => {
 }
 const style = StyleSheet.create({
     containNewBudget: {
-        backgroundColor: 'black',
         flex: 1,
-        transform: [{ translateY: 50 }]
+        transform: [{ translateY: 50 }],
+        ...GlobalStyles.backgroundSecundary
     },
     secondContainNewBudget: {
         borderRadius: 50,
         marginHorizontal: 10,
         transform: [{ translateY: 50 }],
         padding: 50,
-        backgroundColor: '#FABF13',
+        ...GlobalStyles.backgroundPrimary
     },
     buttonAdd: {
         width: 130,
         padding: 4,
-        backgroundColor: 'black',
         borderRadius: 20,
+        ...GlobalStyles.backgroundSecundary
     },
     text: {
         textAlign: 'center',
-
+        marginTop: 3,
         fontSize: 18,
-        color: '#FABF13',
+        ...GlobalStyles.colorPrimary,
         fontWeight: 'bold'
 
     },
@@ -69,14 +68,12 @@ const style = StyleSheet.create({
         textAlign: 'center',
         padding: 4,
         fontSize: 25,
-        color: 'black',
-        fontWeight: '900'
-
+        fontWeight: '900',
+        ...GlobalStyles.colorSecundary
     },
     inputRow: {
         marginTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        ...GlobalStyles.rowJB
     },
     input: {
         width: 160,

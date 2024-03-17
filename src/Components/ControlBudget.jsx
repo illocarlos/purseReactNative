@@ -1,23 +1,64 @@
-import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Pressable, Text, View, StyleSheet, Image } from 'react-native'
+import GlobalStyles from '../Styles/Global.js';
+import { formateDolar } from '../helpers/formateDolar.js';
+
+const ControlBudget = ({ setIsValidateBudget, budget, expends }) => {
+    const [aviable, setAviable] = useState(0)
+    const [expend, setExpend] = useState(0)
+
+    useEffect(() => {
+        //operacion  para relfejar el gasto 
+        const totalExpends = expends.reduce((acc, curr) => acc + curr.total, 0);
+        //operacion para reflejar lo disponibel
+        const totalAviable = budget - totalExpends
 
 
-const ControlBudget = ({ setIsValidateBudget }) => {
+
+        setAviable(totalAviable)
+        setExpend(totalExpends)
+
+    }, [])
+
     return (
-        <View>
+
+        <View style={styles.contain}>
             <Pressable
                 onPress={() => {
                     setIsValidateBudget(false)
                 }}
             >
-                <Text>
-                    cerrar
+                <Text style={styles.textButton}>
+                    close
                 </Text>
             </Pressable>
-            <Text> desde contorl</Text>
+            <Image
+                source={require('../../assets/img/grafico.jpg')}
+            />
+            <Text style={styles.textButton}>
+                budget:{"  "} {formateDolar(budget)}
+            </Text>
+            <Text style={styles.textButton}>
+                aviliable:{"  "} {formateDolar(aviable)}
+            </Text>
+            <Text style={styles.textButton}>
+                expend: {"  "}{formateDolar(expend)}
+            </Text>
         </View>
     )
 }
+const styles = StyleSheet.create({
+    contain: {
+        flex: 1,
+        alignItems: 'center',
+        ...GlobalStyles.backgroundSecundary,
+    },
+    textButton: {
+
+        ...GlobalStyles.TextApp,
+        ...GlobalStyles.colorPrimary,
+    }
+})
 export default ControlBudget
 
 
