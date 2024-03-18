@@ -3,7 +3,7 @@ import GlobalStyles from '../Styles/Global.js';
 
 const App = () => {
     return (
-        <View style={styles.header}>
+        <View >
             <Text style={styles.text}>
                 planificator of expend
 

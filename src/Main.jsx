@@ -27,14 +27,31 @@ const App = () => {
                 }]
             )
 
-
-
         } else {
             return Alert.alert('budget no validate, add a budget ')
         }
 
     }
+    const handleExpend = expend => {
 
+        // {
+        // id:2
+        // }
+        //IMPORTANTE Object.value => este revisa el valor en este caso el lado recehro (2)
+        //IMPORTANTE Object.Keys=>este revisa la clave de los objetos el lado izquiero (id)
+        if (Object.values(expend).includes("")) {
+            return Alert.alert(
+                "Error",
+                "rellena todo los campos",
+                ["ok"]
+
+            )
+        } else {
+            return setexpendModal(!expendModal)
+
+        }
+
+    }
 
 
     return (
@@ -64,6 +81,7 @@ const App = () => {
                     animationType='slide'
                 >
                     <FormularyExpend
+                        handleExpend={handleExpend}
                         setexpendModal={setexpendModal} />
                 </Modal>
             )}

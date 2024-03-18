@@ -1,0 +1,30 @@
+[
+    {
+        "id": "1",
+        "name": "Home"
+    },
+    {
+        "id": "2",
+        "name": "Food"
+    },
+    {
+        "id": "3",
+        "name": "Leisure"
+    },
+    {
+        "id": "4",
+        "name": "Health"
+    },
+    {
+        "id": "5",
+        "name": "Other bills"
+    },
+    {
+        "id": "6",
+        "name": "Savings"
+    },
+    {
+        "id": "7",
+        "name": "Suspcriptions"
+    }
+]
