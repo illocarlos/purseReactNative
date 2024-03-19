@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Alert, Text, Pressable, View, Modal } from 'react-native';
+import { SafeAreaView, StyleSheet, Alert, Text, Pressable, View, Modal, ScrollView } from 'react-native';
 import Header from './Components/Headers.jsx';
 import NewBudget from './Components/NewBudget.jsx';
 import ControlBudget from './Components/ControlBudget.jsx';
 import GlobalStyles from './Styles/Global.js';
 import FormularyExpend from './Components/FormularyExpend.jsx'
+import ExpendList from './Components/ExpendList.jsx';
 const App = () => {
     const [isValidateBudget, setIsValidateBudget] = useState(false)
     const [expendModal, setexpendModal] = useState(false)
@@ -47,7 +48,8 @@ const App = () => {
 
             )
         } else {
-            return setexpendModal(!expendModal)
+            setexpendModal(!expendModal)
+            setExpends([...expends, expend])
 
         }
 
@@ -56,15 +58,17 @@ const App = () => {
 
     return (
         <SafeAreaView style={styles.contain}>
+
+
+
             <Header />
             {!isValidateBudget ? (
                 <NewBudget
+
                     budget={budget}
                     setBudget={setBudget}
                     budgetFunction={budgetFunction} />
             ) : (
-
-
                 <ControlBudget
                     expends={expends}
                     budget={budget}
@@ -72,7 +76,14 @@ const App = () => {
 
             )}
 
+            {isValidateBudget && (
+                <ScrollView>
 
+                    <ExpendList
+                        expends={expends}
+                    />
+                </ScrollView>
+            )}
 
 
             {expendModal && (
@@ -102,6 +113,7 @@ const App = () => {
 
 
                 )}
+
         </SafeAreaView>
     );
 }
@@ -126,7 +138,9 @@ const styles = StyleSheet.create({
     },
     displayButtom: {
         ...GlobalStyles.rowJE,
-    }
+    },
+
+
 
 })
 

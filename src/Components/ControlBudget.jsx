@@ -49,7 +49,7 @@ const ControlBudget = ({ setIsValidateBudget, budget, expends }) => {
 }
 const styles = StyleSheet.create({
     contain: {
-        flex: 1,
+        height: 500,
         alignItems: 'center',
         ...GlobalStyles.backgroundSecundary,
     },

@@ -7,16 +7,16 @@ const NewBudget = ({ budgetFunction, budget, setBudget }) => {
 
 
     return (
-        <View style={style.containNewBudget}>
-            <View style={style.secondContainNewBudget} >
-                <Text style={style.textBlack}>define budget</Text>
-                <View style={style.inputRow} >
+        <View style={styles.containNewBudget}>
+            <View style={styles.secondContainNewBudget} >
+                <Text style={styles.textBlack}>define budget</Text>
+                <View style={styles.inputRow} >
                     <TextInput
                         value={budget.toString()}
                         onChangeText={setBudget}
                         keyboardType="numeric"
                         placeholder="add your budget here"
-                        style={style.input}
+                        style={styles.input}
                         placeholderTextColor={'black'}
                     />
                     <Pressable
@@ -24,8 +24,8 @@ const NewBudget = ({ budgetFunction, budget, setBudget }) => {
                             budgetFunction(budget)
 
                         }}
-                        style={style.buttonAdd}>
-                        <Text style={style.text}>
+                        style={styles.buttonAdd}>
+                        <Text style={styles.text}>
                             add Budget
                         </Text>
                     </Pressable>
@@ -36,18 +36,19 @@ const NewBudget = ({ budgetFunction, budget, setBudget }) => {
         </View>
     )
 }
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     containNewBudget: {
         flex: 1,
         transform: [{ translateY: 50 }],
-        ...GlobalStyles.backgroundSecundary
+        ...GlobalStyles.backgroundSecundary,
+
     },
     secondContainNewBudget: {
         borderRadius: 50,
         marginHorizontal: 10,
         transform: [{ translateY: 50 }],
         padding: 50,
-        ...GlobalStyles.backgroundPrimary
+        ...GlobalStyles.backgroundPrimary,
     },
     buttonAdd: {
         width: 130,
