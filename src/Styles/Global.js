@@ -13,7 +13,7 @@ const GlobalStyles = {
         backgroundColor: secundary,
     },
     btnClose: {
-        height: 30,
+        height: 50,
         backgroundColor: colorClose,
         justifyContent: 'center',
         alignItems: 'center'

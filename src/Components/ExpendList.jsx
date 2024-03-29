@@ -4,7 +4,7 @@ import GlobalStyles from '../Styles/Global.js';
 import { ExpendDetails } from './ExpendDetails.jsx';
 const ExpendList = ({ expends, setexpendModal, setOneExpend }) => {
     return (
-        <View style={styles.contain}>
+        <View >
             <Text style={styles.texth1}>expend</Text>
             {expends.length === 0 ?
                 <Text style={styles.texth2}> No expend</Text>

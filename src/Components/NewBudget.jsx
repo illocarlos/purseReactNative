@@ -39,6 +39,7 @@ const NewBudget = ({ budgetFunction, budget, setBudget }) => {
 const styles = StyleSheet.create({
     containNewBudget: {
         flex: 1,
+        height: 1000,
         transform: [{ translateY: 50 }],
         ...GlobalStyles.backgroundSecundary,
 

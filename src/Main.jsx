@@ -33,6 +33,8 @@ const App = () => {
         }
 
     }
+
+    // crear y editar gasto
     const handleExpend = expend => {
         // {
         // id:2
@@ -55,10 +57,30 @@ const App = () => {
             console.log('creando')
             setExpends([...expends, expend])
         }
-
-
-
         setexpendModal(!expendModal)
+    }
+
+    // eliminar gasto
+    const deletedExpend = (id) => {
+        console.log('oeee', id)
+        Alert.alert(
+            'do you want deleted this expend?',
+            'is correct?',
+            [{ text: 'cancel', onPress: () => { } },
+            {
+                text: 'deleted', onPress: () => {
+                    deleted(id)
+                }
+            }]
+        )
+    }
+
+    // funcio para eliminarlo
+    const deleted = (id) => {
+        const deletedExpend = expends.filter(eachExpend => eachExpend.id !== id)
+        setExpends(deletedExpend)
+        setexpendModal(!expendModal)
+        setOneExpend({})
 
     }
 
@@ -67,70 +89,83 @@ const App = () => {
         <SafeAreaView style={styles.contain}>
 
 
-
             <Header />
-            {!isValidateBudget ? (
-                <NewBudget
+            <ScrollView style={styles.containsecond}>
 
-                    budget={budget}
-                    setBudget={setBudget}
-                    budgetFunction={budgetFunction} />
-            ) : (
-                <ControlBudget
-                    expends={expends}
-                    budget={budget}
-                    setIsValidateBudget={setIsValidateBudget} />
-
-            )}
-
-            {isValidateBudget && (
-                <ScrollView>
-
-                    <ExpendList
-                        expends={expends}
-                        setexpendModal={setexpendModal}
-                        setOneExpend={setOneExpend}
-                    />
-                </ScrollView>
-            )}
+                <View style={styles.containPost}>
+                    {!isValidateBudget ? (
 
 
-            {expendModal && (
+                        <NewBudget
 
-                <Modal
-                    animationType='slide'
-                >
-                    <FormularyExpend
-                        handleExpend={handleExpend}
-                        setexpendModal={setexpendModal}
-                        setOneExpend={setOneExpend}
-                        oneExpend={oneExpend}
-                    />
-                </Modal>
-            )}
+                            budget={budget}
+                            setBudget={setBudget}
+                            budgetFunction={budgetFunction} />
 
-            {isValidateBudget &&
-                (
-                    <View style={styles.displayButtom}>
-                        <Pressable
-                            onPress={() => {
-                                setexpendModal(!expendModal)
-                            }}
+                    ) : (
+
+                        <ControlBudget
+                            expends={expends}
+                            budget={budget}
+                            setIsValidateBudget={setIsValidateBudget} />
+
+
+                    )}
+
+                    {isValidateBudget && (
+                        <View style={styles.contain}>
+
+                            <ExpendList
+                                expends={expends}
+                                setexpendModal={setexpendModal}
+                                setOneExpend={setOneExpend}
+                            />
+                        </View>
+                    )}
+
+
+                    {expendModal && (
+
+                        <Modal
+                            animationType='slide'
                         >
-                            <View style={styles.buttonAddExpend}>
-                                <Text style={styles.text}>+</Text>
+                            <FormularyExpend
+                                handleExpend={handleExpend}
+                                setexpendModal={setexpendModal}
+                                setOneExpend={setOneExpend}
+                                oneExpend={oneExpend}
+                                deletedExpend={deletedExpend}
+                            />
+                        </Modal>
+                    )}
+
+                    {isValidateBudget &&
+                        (
+                            <View style={styles.displayButtom}>
+                                <Pressable
+                                    onPress={() => {
+                                        setexpendModal(!expendModal)
+                                    }}
+                                >
+                                    <View style={styles.buttonAddExpend}>
+                                        <Text style={styles.text}>+</Text>
+                                    </View>
+                                </Pressable>
                             </View>
-                        </Pressable>
-                    </View>
 
 
-                )}
-
-        </SafeAreaView>
+                        )}
+                </View>
+            </ScrollView>
+        </SafeAreaView >
     );
 }
 const styles = StyleSheet.create({
     contain: {
+        flex: 1,
+        ...GlobalStyles.backgroundPrimary,
+    },
+    containPost: {
         flex: 1,
         ...GlobalStyles.backgroundPrimary,
     },
@@ -152,7 +187,10 @@ const styles = StyleSheet.create({
         ...GlobalStyles.rowJE,
     },
 
-
+    containscroll: {
+        flex: 1,
+        backgroundColor: 'black'
+    }
 
 })
 

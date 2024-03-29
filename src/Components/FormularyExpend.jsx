@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import Category from '../json/Category.json';
 import { uid } from 'uid';
 
-const FormularyExpend = ({ setexpendModal, handleExpend, setOneExpend, oneExpend }) => {
+const FormularyExpend = ({ setexpendModal, handleExpend, setOneExpend, oneExpend, deletedExpend }) => {
     const [nameExpend, setNameExpend] = useState("");
     const [cuantityExpend, setCuantityExpend] = useState("");
     const [categoryExpend, setCategoryExpend] = useState("");
@@ -77,6 +77,7 @@ const FormularyExpend = ({ setexpendModal, handleExpend, setOneExpend, oneExpend
 
     return (
         <SafeAreaView style={styles.containForm}>
+
             <Pressable
                 style={styles.btnCancel}
                 onPress={() => {
@@ -87,7 +88,9 @@ const FormularyExpend = ({ setexpendModal, handleExpend, setOneExpend, oneExpend
                 <Text style={styles.textClose}>Close</Text>
             </Pressable>
 
-            <View>
+
+
+            <View style={styles.containform}>
                 <Text style={[styles.form_h1, styles.containFormInput]}>
                     {Object.keys(oneExpend).length > 0 ? 'Edit Expend' : 'Add Expend'}
                 </Text>
@@ -136,11 +139,32 @@ const FormularyExpend = ({ setexpendModal, handleExpend, setOneExpend, oneExpend
                     </Text>
                 </Pressable>
             </View>
+
+            {Object.keys(oneExpend).length > 0 && (
+
+
+                <Pressable
+                    style={[styles.btnCancel, styles.deleted]}
+                    onLongPress={() => {
+                        deletedExpend(oneExpend.id)
+                    }}
+                >
+                    <Text style={styles.textClose}>deleted</Text>
+                </Pressable>
+
+            )}
+
+
+
+
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    containform: {
+        flex: 1,
+    },
     form_h1: {
         fontSize: 30,
         textAlign: 'center',
@@ -175,11 +199,13 @@ const styles = StyleSheet.create({
         ...GlobalStyles.colorPrimary
     },
     btnCancel: {
+        height: 50,
         ...GlobalStyles.btnClose
     },
     textClose: {
         ...GlobalStyles.textClose
-    }
+    },
+
 });
 
 export default FormularyExpend;
