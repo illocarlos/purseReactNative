@@ -1,51 +1,96 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, Pressable, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, TextInput, Pressable, SafeAreaView, Alert } from 'react-native';
 import GlobalStyles from '../Styles/Global';
 import { Picker } from '@react-native-picker/picker';
 import Category from '../json/Category.json';
 import { uid } from 'uid';
 
-const FormularyExpend = ({ setexpendModal, handleExpend }) => {
+const FormularyExpend = ({ setexpendModal, handleExpend, setOneExpend, oneExpend }) => {
     const [nameExpend, setNameExpend] = useState("");
     const [cuantityExpend, setCuantityExpend] = useState("");
-    const [categoryExpend, setCategoryExpend] = useState(""); // Estado para la categoría completa
+    const [categoryExpend, setCategoryExpend] = useState("");
+    const [date, setDate] = useState("");
+    const [id, setId] = useState("");
+    const [isEdit, setIsEdit] = useState(false);
+
+    useEffect(() => {
+        if (Object.keys(oneExpend).length > 0) {
+            setNameExpend(oneExpend.nameExpend);
+            setCuantityExpend(oneExpend.cuantityExpend);
+            setCategoryExpend(oneExpend.categoryExpend.name);
+            setDate(oneExpend.date);
+            setId(oneExpend.id);
+            setIsEdit(true);
+        } else {
+            setNameExpend("");
+            setCuantityExpend("");
+            setCategoryExpend("");
+            setIsEdit(false);
+        }
+    }, [oneExpend]);
 
     const handleCategoryChange = (value) => {
-        const selectedCategory = Category.find(category => category.name === value);
-        setCategoryExpend(selectedCategory);
+        setCategoryExpend(value);
     };
 
     const handleSubmit = () => {
+
+
+
         if (!nameExpend || !cuantityExpend || !categoryExpend) {
-            console.log("Please fill all the fields.");
-            return;
+            return Alert.alert(
+                "Error",
+                "Please fill all the fields",
+                ["ok"]
+            );
+        }
+        if (Object.keys(oneExpend).length > 0) {
+            const newExpend = {
+                id: isEdit ? id : uid(16),
+                date: isEdit ? date : Date.now(),
+                nameExpend,
+                cuantityExpend,
+                categoryExpend: { name: categoryExpend },
+                isEdit: true
+            };
+            handleExpend(newExpend);
+        } else {
+            const newExpend = {
+                id: isEdit ? id : uid(16),
+                date: isEdit ? date : Date.now(),
+                nameExpend,
+                cuantityExpend,
+                categoryExpend: { name: categoryExpend },
+                isEdit: false
+            };
+            handleExpend(newExpend);
         }
 
-        handleExpend({
-            id: uid(16),
-            nameExpend,
-            cuantityExpend,
-            categoryExpend,
-        });
 
-        // Limpiar los campos después de agregar el gasto
+
+
         setNameExpend("");
         setCuantityExpend("");
-        setCategoryExpend(null);
+        setCategoryExpend("");
+        setIsEdit(false);
     };
 
     return (
         <SafeAreaView style={styles.containForm}>
             <Pressable
                 style={styles.btnCancel}
-                onPress={() => setexpendModal(false)}
+                onPress={() => {
+                    setexpendModal(false);
+                    setOneExpend({});
+                }}
             >
                 <Text style={styles.textClose}>Close</Text>
             </Pressable>
 
             <View>
-                <Text style={[styles.form_h1, styles.containFormInput]}>Add Expend</Text>
-
+                <Text style={[styles.form_h1, styles.containFormInput]}>
+                    {Object.keys(oneExpend).length > 0 ? 'Edit Expend' : 'Add Expend'}
+                </Text>
                 <View style={[styles.containFormInput, styles.containFormInput]}>
                     <Text style={styles.textForm}>Name Expend</Text>
                     <TextInput
@@ -70,7 +115,7 @@ const FormularyExpend = ({ setexpendModal, handleExpend }) => {
                 <View>
                     <Text style={styles.textForm}>Category expend</Text>
                     <Picker
-                        selectedValue={categoryExpend ? categoryExpend.name : ''}
+                        selectedValue={categoryExpend}
                         onValueChange={handleCategoryChange}
                     >
                         <Picker.Item label='-- Select category --' value="" />
@@ -84,7 +129,11 @@ const FormularyExpend = ({ setexpendModal, handleExpend }) => {
                     style={styles.submitbtnExpend}
                     onPress={handleSubmit}
                 >
-                    <Text style={styles.submitTextExpend}>Create Expend</Text>
+                    <Text style={styles.submitTextExpend}>
+                        {Object.keys(oneExpend).length > 0 ?
+                            'Save Expend' : 'Create Expend'
+                        }
+                    </Text>
                 </Pressable>
             </View>
         </SafeAreaView>

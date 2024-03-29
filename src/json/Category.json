@@ -2,7 +2,7 @@
     {
         "id": "1",
         "name": "Home",
-        "url": "../../assets/img/Home.png"
+        "url": "file://../../assets/img/Home.png"
     },
     {
         "id": "2",

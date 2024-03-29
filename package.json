@@ -14,6 +14,7 @@
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-native": "0.73.5",
+    "react-native-image-cache-wrapper": "^1.0.7",
     "uid": "^2.0.2"
   },
   "devDependencies": {

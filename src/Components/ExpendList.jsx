@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import GlobalStyles from '../Styles/Global.js';
 import { ExpendDetails } from './ExpendDetails.jsx';
-const ExpendList = ({ expends }) => {
+const ExpendList = ({ expends, setexpendModal, setOneExpend }) => {
     return (
         <View style={styles.contain}>
             <Text style={styles.texth1}>expend</Text>
@@ -14,6 +14,8 @@ const ExpendList = ({ expends }) => {
                     <ExpendDetails
                         key={expend.id}
                         expend={expend}
+                        setexpendModal={setexpendModal}
+                        setOneExpend={setOneExpend}
                     />
                 ))
             }

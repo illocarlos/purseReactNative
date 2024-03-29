@@ -11,7 +11,7 @@ const App = () => {
     const [expendModal, setexpendModal] = useState(false)
     const [budget, setBudget] = useState(0)
     const [expends, setExpends] = useState([])
-
+    const [oneExpend, setOneExpend] = useState({})
 
     const budgetFunction = (budget) => {
         if (Number(budget) && Number(budget) > 0) {
@@ -34,24 +34,31 @@ const App = () => {
 
     }
     const handleExpend = expend => {
-
         // {
         // id:2
-        // }
         //IMPORTANTE Object.value => este revisa el valor en este caso el lado recehro (2)
         //IMPORTANTE Object.Keys=>este revisa la clave de los objetos el lado izquiero (id)
-        if (Object.values(expend).includes("")) {
+        if ([expend.cuantityExpend, expend.nameExpend, expend.categoryExpend.name].includes('')) {
             return Alert.alert(
                 "Error",
                 "rellena todo los campos",
                 ["ok"]
 
             )
-        } else {
-            setexpendModal(!expendModal)
-            setExpends([...expends, expend])
-
         }
+
+        if (expend.isEdit) {
+            console.log('editandooooo', expend)
+            const editExpend = expends.map(eachExpend => eachExpend.id === expend.id ? expend : eachExpend)
+            setExpends(editExpend)
+        } else {
+            console.log('creando')
+            setExpends([...expends, expend])
+        }
+
+
+
+        setexpendModal(!expendModal)
 
     }
 
@@ -81,6 +88,8 @@ const App = () => {
 
                     <ExpendList
                         expends={expends}
+                        setexpendModal={setexpendModal}
+                        setOneExpend={setOneExpend}
                     />
                 </ScrollView>
             )}
@@ -93,7 +102,10 @@ const App = () => {
                 >
                     <FormularyExpend
                         handleExpend={handleExpend}
-                        setexpendModal={setexpendModal} />
+                        setexpendModal={setexpendModal}
+                        setOneExpend={setOneExpend}
+                        oneExpend={oneExpend}
+                    />
                 </Modal>
             )}
 

@@ -8,17 +8,18 @@ const ControlBudget = ({ setIsValidateBudget, budget, expends }) => {
     const [expend, setExpend] = useState(0)
 
     useEffect(() => {
+
+
+
         //operacion  para relfejar el gasto 
-        const totalExpends = expends.reduce((acc, curr) => acc + curr.total, 0);
+        const totalExpends = expends.reduce((acc, curr) => acc + parseInt(curr.cuantityExpend), 0);
         //operacion para reflejar lo disponibel
+
         const totalAviable = budget - totalExpends
-
-
-
         setAviable(totalAviable)
         setExpend(totalExpends)
 
-    }, [])
+    }, [expends])
 
     return (
 
