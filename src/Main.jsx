@@ -1,17 +1,108 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView, StyleSheet, Alert, Text, Pressable, View, Modal, ScrollView } from 'react-native';
+
+// componentes
 import Header from './Components/Headers.jsx';
 import NewBudget from './Components/NewBudget.jsx';
 import ControlBudget from './Components/ControlBudget.jsx';
 import GlobalStyles from './Styles/Global.js';
 import FormularyExpend from './Components/FormularyExpend.jsx'
 import ExpendList from './Components/ExpendList.jsx';
+import Filter from './Components/Filter.jsx';
+
+
+
 const App = () => {
     const [isValidateBudget, setIsValidateBudget] = useState(false)
-    const [expendModal, setexpendModal] = useState(false)
     const [budget, setBudget] = useState(0)
+    // aabrir y cerrar for
+    const [expendModal, setexpendModal] = useState(false)
+    //  los gastos
     const [expends, setExpends] = useState([])
+    // edit
     const [oneExpend, setOneExpend] = useState({})
+
+    // filtros 
+    const [filter, setFilter] = useState("")
+    const [filterExpend, setFilterExpend] = useState([])
+
+
+    useEffect(() => {
+        const getBudget = async () => {
+            try {
+                const BudgetStorage = await AsyncStorage.getItem('budget_storage') ?? 0
+
+                if (BudgetStorage > 0) {
+                    setBudget(BudgetStorage)
+                    setIsValidateBudget(true)
+                }
+
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getBudget()
+    }, [])
+
+
+    useEffect(() => {
+
+        if (isValidateBudget) {
+
+            const saveBudgetStorage = async () => {
+
+                try {
+                    await AsyncStorage.setItem('budget_storage', budget)
+
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            saveBudgetStorage()
+        }
+
+    }, [isValidateBudget])
+
+
+
+
+    // GASTOS
+    useEffect(() => {
+        const getExpendStorage = async () => {
+
+            try {
+                const expendStorage = await AsyncStorage.getItem('expends_storage') ?? []
+                setExpends(expendStorage ? JSON.parse(expendStorage) : [])
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+        getExpendStorage()
+
+    }, [expends])
+
+    useEffect(() => {
+        const saveExpendStorage = async () => {
+
+            try {
+                await AsyncStorage.setItem('expends_storage', JSON.stringify(expends))
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+        saveExpendStorage()
+
+    }, [expends])
+
+
+
+
+
 
     const budgetFunction = (budget) => {
         if (Number(budget) && Number(budget) > 0) {
@@ -50,7 +141,7 @@ const App = () => {
         }
 
         if (expend.isEdit) {
-            console.log('editandooooo', expend)
+            console.log('editandooooo', expend.categoryExpend.name)
             const editExpend = expends.map(eachExpend => eachExpend.id === expend.id ? expend : eachExpend)
             setExpends(editExpend)
         } else {
@@ -86,13 +177,14 @@ const App = () => {
 
 
     return (
+
         <SafeAreaView style={styles.contain}>
 
 
             <Header />
-            <ScrollView style={styles.containsecond}>
 
-                <View style={styles.containPost}>
+            <View style={styles.containPost}>
+                <ScrollView style={styles.containsecond}>
                     {!isValidateBudget ? (
 
 
@@ -113,16 +205,24 @@ const App = () => {
                     )}
 
                     {isValidateBudget && (
-                        <View style={styles.contain}>
 
-                            <ExpendList
+                        <View style={styles.contain}>
+                            <Filter
                                 expends={expends}
+                                setFilterExpend={setFilterExpend}
+                                filter={filter}
+                                setfilter={setFilter}
+                            />
+                            <ExpendList
+                                filter={filter}
+                                expends={expends}
+                                filterExpend={filterExpend}
                                 setexpendModal={setexpendModal}
                                 setOneExpend={setOneExpend}
                             />
                         </View>
-                    )}
 
+                    )}
 
                     {expendModal && (
 
@@ -155,8 +255,8 @@ const App = () => {
 
 
                         )}
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
         </SafeAreaView >
     );
 }
