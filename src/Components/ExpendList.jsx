@@ -33,7 +33,7 @@ const ExpendList = ({ expends,
                 />
             ))
             }
-            {expends.length === 0 || filterExpend.length === 0 && (
+            {(expends.length === 0 || (filterExpend.length === 0 && !!filter)) && (
                 <Text style={styles.texth2}> No expend</Text>
 
             )}

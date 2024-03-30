@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView, StyleSheet, Alert, Text, Pressable, View, Modal, ScrollView } from 'react-native';
 
@@ -11,169 +11,157 @@ import FormularyExpend from './Components/FormularyExpend.jsx'
 import ExpendList from './Components/ExpendList.jsx';
 import Filter from './Components/Filter.jsx';
 
-
-
 const App = () => {
-    const [isValidateBudget, setIsValidateBudget] = useState(false)
+    const [isValidateBudget, setIsValidateBudget] = useState(false);
+    // cracion budget
     const [budget, setBudget] = useState(0)
-    // aabrir y cerrar for
-    const [expendModal, setexpendModal] = useState(false)
-    //  los gastos
-    const [expends, setExpends] = useState([])
-    // edit
-    const [oneExpend, setOneExpend] = useState({})
 
-    // filtros 
-    const [filter, setFilter] = useState("")
-    const [filterExpend, setFilterExpend] = useState([])
+    // abrir cerrar modal
+    const [expendModal, setexpendModal] = useState(false);
 
+    // filter
+    // donde se veran los filtros 
+    const [filter, setFilter] = useState("");
+    // array de los gastos filtrados
+    const [filterExpend, setFilterExpend] = useState([]);
+
+    // objeto para editar los gastos
+    const [oneExpend, setOneExpend] = useState({});
+    // aqui introducimos los gastos
+    const [expends, setExpends] = useState([]);
 
     useEffect(() => {
         const getBudget = async () => {
             try {
-                const BudgetStorage = await AsyncStorage.getItem('budget_storage') ?? 0
-
-                if (BudgetStorage > 0) {
-                    setBudget(BudgetStorage)
-                    setIsValidateBudget(true)
+                const BudgetStorage = await AsyncStorage.getItem('budget_storage');
+                if (BudgetStorage !== null && parseFloat(BudgetStorage) > 0) {
+                    setBudget(parseFloat(BudgetStorage));
+                    setIsValidateBudget(true);
                 }
-
-
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
         }
-
-        getBudget()
-    }, [])
-
+        getBudget();
+    }, []);
 
     useEffect(() => {
+        const saveBudgetStorage = async () => {
+            try {
+                await AsyncStorage.setItem('budget_storage', budget.toString());
+            } catch (error) {
+                console.log(error);
+            }
+        }
 
         if (isValidateBudget) {
-
-            const saveBudgetStorage = async () => {
-
-                try {
-                    await AsyncStorage.setItem('budget_storage', budget)
-
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-            saveBudgetStorage()
+            saveBudgetStorage();
         }
+    }, [budget, isValidateBudget]);
 
-    }, [isValidateBudget])
-
-
-
-
-    // GASTOS
     useEffect(() => {
         const getExpendStorage = async () => {
-
             try {
-                const expendStorage = await AsyncStorage.getItem('expends_storage') ?? []
-                setExpends(expendStorage ? JSON.parse(expendStorage) : [])
+                const expendStorage = await AsyncStorage.getItem('expends_storage') ?? '[]';
+                setExpends(JSON.parse(expendStorage));
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-
         }
-        getExpendStorage()
-
-    }, [expends])
+        getExpendStorage();
+    }, []);
 
     useEffect(() => {
         const saveExpendStorage = async () => {
-
             try {
-                await AsyncStorage.setItem('expends_storage', JSON.stringify(expends))
+                await AsyncStorage.setItem('expends_storage', JSON.stringify(expends));
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-
         }
-        saveExpendStorage()
-
-    }, [expends])
-
-
-
-
-
+        saveExpendStorage();
+    }, [expends]);
 
     const budgetFunction = (budget) => {
         if (Number(budget) && Number(budget) > 0) {
             Alert.alert(
-                `the budget is ${budget}$  `,
-                'is correct?',
-                [{ text: 'cancel', onPress: () => { } },
-                {
-                    text: 'add budget', onPress: () => {
-                        parseInt(budget)
-                        setIsValidateBudget(true)
-
-                    }
-                }]
-            )
-
+                `The budget is ${budget}$`,
+                'Is correct?',
+                [
+                    { text: 'Cancel', onPress: () => { } },
+                    { text: 'Add budget', onPress: () => { setBudget(parseInt(budget)); setIsValidateBudget(true); } }
+                ]
+            );
         } else {
-            return Alert.alert('budget no validate, add a budget ')
+            Alert.alert('Budget not valid, add a budget');
         }
-
     }
 
-    // crear y editar gasto
-    const handleExpend = expend => {
-        // {
-        // id:2
-        //IMPORTANTE Object.value => este revisa el valor en este caso el lado recehro (2)
-        //IMPORTANTE Object.Keys=>este revisa la clave de los objetos el lado izquiero (id)
+    const handleExpend = (expend) => {
         if ([expend.cuantityExpend, expend.nameExpend, expend.categoryExpend.name].includes('')) {
-            return Alert.alert(
-                "Error",
-                "rellena todo los campos",
-                ["ok"]
-
-            )
+            Alert.alert("Error", "Fill in all fields", ["Ok"]);
+            return;
         }
 
         if (expend.isEdit) {
-            console.log('editandooooo', expend.categoryExpend.name)
-            const editExpend = expends.map(eachExpend => eachExpend.id === expend.id ? expend : eachExpend)
-            setExpends(editExpend)
+            const editExpend = expends.map(eachExpend => eachExpend.id === expend.id ? expend : eachExpend);
+            setExpends(editExpend);
         } else {
-            console.log('creando')
-            setExpends([...expends, expend])
+            setExpends([...expends, expend]);
         }
-        setexpendModal(!expendModal)
+        setexpendModal(!expendModal);
     }
 
-    // eliminar gasto
     const deletedExpend = (id) => {
-        console.log('oeee', id)
         Alert.alert(
-            'do you want deleted this expend?',
-            'is correct?',
-            [{ text: 'cancel', onPress: () => { } },
-            {
-                text: 'deleted', onPress: () => {
-                    deleted(id)
-                }
-            }]
-        )
+            'Do you want to delete this expense?',
+            'Is correct?',
+            [
+                { text: 'Cancel', onPress: () => { } },
+                { text: 'Delete', onPress: () => { deleted(id); } }
+            ]
+        );
     }
 
-    // funcio para eliminarlo
     const deleted = (id) => {
-        const deletedExpend = expends.filter(eachExpend => eachExpend.id !== id)
-        setExpends(deletedExpend)
-        setexpendModal(!expendModal)
-        setOneExpend({})
+
+        const deletedExpend = expends.filter(eachExpend => eachExpend.id !== id);
+        setExpends(deletedExpend);
+        setFilterExpend(deletedExpend)
+
+        setexpendModal(!expendModal);
+        setOneExpend({});
+    }
+
+
+    const reset = () => {
+
+        Alert.alert(
+            'Do you want reset this planificator?',
+            'Is correct?',
+            [
+                { text: 'Cancel', onPress: () => { } },
+                {
+                    text: 'Delete', onPress: async () => {
+                        try {
+                            await AsyncStorage.clear()
+
+                            setIsValidateBudget(false)
+                            setBudget(0)
+                            setExpends([])
+                        } catch (error) {
+                            console.log(error)
+                        }
+
+                    }
+                }
+            ]
+        );
+
+
 
     }
+
 
 
     return (
@@ -199,7 +187,9 @@ const App = () => {
                         <ControlBudget
                             expends={expends}
                             budget={budget}
-                            setIsValidateBudget={setIsValidateBudget} />
+                            setFilterExpend={setFilterExpend}
+                            reset={reset}
+                        />
 
 
                     )}

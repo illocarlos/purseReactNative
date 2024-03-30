@@ -183,9 +183,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     containTextInputForm: {
-        width: 230,
+        width: 250,
         fontSize: 20,
-        marginHorizontal: 100,
+        marginHorizontal: 70,
     },
     submitbtnExpend: {
         marginVertical: 10,
